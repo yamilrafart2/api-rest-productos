@@ -4,6 +4,8 @@ import com.yamilrafart.apirest_productos.entity.Producto;
 import com.yamilrafart.apirest_productos.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductoServiceImpl implements IProducto{
 
@@ -16,6 +18,11 @@ public class ProductoServiceImpl implements IProducto{
     @Override
     public Producto save(Producto producto) {
         return productoRepository.save(producto);
+    }
+
+    @Override
+    public List<Producto> findAll() {
+        return productoRepository.findAll();
     }
 
 }
