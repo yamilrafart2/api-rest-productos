@@ -10,4 +10,6 @@ public interface IProducto {
 
     List<Producto> findAll();
 
+    Producto findById(Integer id);
+
 }
