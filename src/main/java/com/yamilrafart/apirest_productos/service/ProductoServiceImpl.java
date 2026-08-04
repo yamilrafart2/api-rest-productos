@@ -35,4 +35,15 @@ public class ProductoServiceImpl implements IProducto{
         productoRepository.deleteById(id);
     }
 
+    @Override
+    public Producto update(Producto producto) {
+        Producto productoBD = productoRepository.findById(producto.getId()).get();
+
+        productoBD.setNombre(producto.getNombre());
+        productoBD.setDescripcion(producto.getDescripcion());
+        productoBD.setPrecio(producto.getPrecio());
+
+        return productoRepository.save(productoBD);
+    }
+
 }

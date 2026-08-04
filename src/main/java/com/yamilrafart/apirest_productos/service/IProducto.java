@@ -14,4 +14,6 @@ public interface IProducto {
 
     void deleteById(Integer id);
 
+    Producto update(Producto producto);
+
 }

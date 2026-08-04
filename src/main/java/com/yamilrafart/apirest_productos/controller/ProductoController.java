@@ -57,4 +57,15 @@ public class ProductoController {
         iProducto.deleteById(id);
     }
 
+    /**
+     * PUT
+     * http://localhost:8080
+     * @param producto
+     * @return
+     */
+    @PutMapping
+    public Producto update(@RequestBody Producto producto){
+        return iProducto.update(producto);
+    }
+
 }
