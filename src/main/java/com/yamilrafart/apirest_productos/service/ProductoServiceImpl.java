@@ -30,4 +30,9 @@ public class ProductoServiceImpl implements IProducto{
         return productoRepository.findById(id).get();
     }
 
+    @Override
+    public void deleteById(Integer id) {
+        productoRepository.deleteById(id);
+    }
+
 }

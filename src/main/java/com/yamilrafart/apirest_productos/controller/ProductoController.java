@@ -15,19 +15,46 @@ public class ProductoController {
         this.iProducto = iProducto;
     }
 
+    /**
+     * POST
+     * http://localhost:8080
+     * @param producto
+     * @return
+     */
     @PostMapping
     public Producto save(@RequestBody Producto producto) {
         return iProducto.save(producto);
     }
 
+    /**
+     * GET
+     * http://localhost:8080
+     * @return
+     */
     @GetMapping
     public List<Producto> findAll(){
         return iProducto.findAll();
     }
 
+    /**
+     * GET
+     * http://localhost:8080/1
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}")
     public Producto findById(@PathVariable Integer id){
         return iProducto.findById(id);
+    }
+
+    /**
+     * DELETE
+     * http://localhost:8080/2
+     * @param id
+     */
+    @DeleteMapping("/{idProducto}")
+    public void deleteById(@PathVariable("idProducto") Integer id){
+        iProducto.deleteById(id);
     }
 
 }
