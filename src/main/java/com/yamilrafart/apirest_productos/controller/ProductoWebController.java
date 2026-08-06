@@ -2,8 +2,10 @@ package com.yamilrafart.apirest_productos.controller;
 
 import com.yamilrafart.apirest_productos.entity.Producto;
 import com.yamilrafart.apirest_productos.service.IProducto;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -43,9 +45,12 @@ public class ProductoWebController {
     }
 
     @PostMapping("/guardar")
-    public String guardarProducto(@ModelAttribute("producto") Producto producto) {
-        // Si el producto tiene un ID, significa que ya existe, entonces lo actualiza.
-        // Si no tiene ID, es uno nuevo y lo guarda.
+    public String guardarProducto(@Valid @ModelAttribute("producto") Producto producto, BindingResult result) {
+        // Si no cumple las reglas de la entidad (ej. precio negativo), vuelve al formulario
+        if (result.hasErrors()) {
+            return "producto-form";
+        }
+
         if (producto.getId() != null) {
             iProducto.update(producto);
         } else {
