@@ -16,6 +16,13 @@
     padding: 0;
 }
 
+/* Reseteo de estilos por defecto del navegador para fieldset */
+fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
 body {
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     background-color: var(--bg-color);
@@ -153,8 +160,15 @@ tr:hover {
 }
 
 .actions {
-    display: flex;
-    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.actions .btn {
+    margin-right: 0.5rem;
+}
+
+.actions .btn:last-child {
+    margin-right: 0;
 }
 
 /* Formularios */

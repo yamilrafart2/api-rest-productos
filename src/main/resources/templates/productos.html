@@ -1,45 +1,56 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Productos</title>
-
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<h1>Gestión de Productos</h1>
 
-<a th:href="@{/web/productos/nuevo}">Crear Nuevo Producto</a>
+<div th:replace="~{fragments/header :: navbar}"></div>
 
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Descripción</th>
-        <th>Precio</th>
-        <th>Fecha Creación</th>
-        <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="producto : ${productos}">
-        <td th:text="${producto.id}"></td>
-        <td th:text="${producto.nombre}"></td>
-        <td th:text="${producto.descripcion}"></td>
-        <td th:text="${producto.precio}"></td>
-        <td th:text="${#temporals.format(producto.fechaCreacion, 'dd/MM/yyyy HH:mm')}"></td>
-        <td>
-            <a th:href="@{/web/productos/editar/{id}(id=${producto.id})}">Editar</a>
-            
-            <a th:href="@{/web/productos/eliminar/{id}(id=${producto.id})}"
-               onclick="confirmarEliminacion(event)">
-                Eliminar
-            </a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<main class="main-content">
+    <section class="card" aria-labelledby="titulo-gestion">
+        <header class="card-header">
+            <h2 id="titulo-gestion">Gestión de Productos</h2>
+            <a th:href="@{/web/productos/nuevo}" class="btn btn-primary" aria-label="Crear un nuevo producto">+ Nuevo
+                Producto</a>
+        </header>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Fecha Creación</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="producto : ${productos}">
+                    <td th:text="${producto.id}"></td>
+                    <td th:text="${producto.nombre}"></td>
+                    <td th:text="${producto.descripcion}"></td>
+                    <td th:text="${producto.precio}"></td>
+                    <td th:text="${#temporals.format(producto.fechaCreacion, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td class="actions">
+                        <a th:href="@{/web/productos/editar/{id}(id=${producto.id})}" class="btn btn-primary"
+                           aria-label="Editar producto">Editar</a>
+                        <a th:href="@{/web/productos/eliminar/{id}(id=${producto.id})}"
+                           class="btn btn-danger"
+                           aria-label="Eliminar producto"
+                           onclick="confirmarEliminacion(event)">Eliminar</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
 
 <script th:src="@{/js/main.js}"></script>
 </body>
