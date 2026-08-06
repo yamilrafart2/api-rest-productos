@@ -10,9 +10,9 @@ public interface IProducto {
 
     List<Producto> findAll();
 
-    Producto findById(Integer id);
+    Producto findById(Long id);
 
-    void deleteById(Integer id);
+    void deleteById(Long id);
 
     Producto update(Producto producto);
 

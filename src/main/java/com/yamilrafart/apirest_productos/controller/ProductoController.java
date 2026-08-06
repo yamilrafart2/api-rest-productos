@@ -2,70 +2,65 @@ package com.yamilrafart.apirest_productos.controller;
 
 import com.yamilrafart.apirest_productos.entity.Producto;
 import com.yamilrafart.apirest_productos.service.IProducto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/productos")
 public class ProductoController {
 
-    private IProducto iProducto;
+    private final IProducto iProducto;
 
     public ProductoController(IProducto iProducto) {
         this.iProducto = iProducto;
     }
 
-    /**
-     * POST
-     * http://localhost:8080
-     * @param producto
-     * @return
-     */
+
     @PostMapping
-    public Producto save(@RequestBody Producto producto) {
-        return iProducto.save(producto);
+    public ResponseEntity<Producto> save(@RequestBody Producto producto) {
+
+        Producto productoGuardado = iProducto.save(producto);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(productoGuardado);
     }
 
-    /**
-     * GET
-     * http://localhost:8080
-     * @return
-     */
+
     @GetMapping
-    public List<Producto> findAll(){
-        return iProducto.findAll();
+    public ResponseEntity<List<Producto>> findAll(){
+
+        return ResponseEntity.ok(iProducto.findAll());
     }
 
-    /**
-     * GET
-     * http://localhost:8080/1
-     * @param id
-     * @return
-     */
+
     @GetMapping("/{id}")
-    public Producto findById(@PathVariable Integer id){
-        return iProducto.findById(id);
+    public ResponseEntity<Producto> findById(
+            @PathVariable Long id){
+
+        return ResponseEntity.ok(iProducto.findById(id));
     }
 
-    /**
-     * DELETE
-     * http://localhost:8080/2
-     * @param id
-     */
-    @DeleteMapping("/{idProducto}")
-    public void deleteById(@PathVariable("idProducto") Integer id){
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(
+            @PathVariable Long id){
+
         iProducto.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 
-    /**
-     * PUT
-     * http://localhost:8080
-     * @param producto
-     * @return
-     */
-    @PutMapping
-    public Producto update(@RequestBody Producto producto){
-        return iProducto.update(producto);
-    }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Producto> update(
+            @PathVariable Long id,
+            @RequestBody Producto producto){
+
+        producto.setId(id);
+
+        return ResponseEntity.ok(iProducto.update(producto));
+    }
 }
