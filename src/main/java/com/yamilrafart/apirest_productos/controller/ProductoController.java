@@ -2,6 +2,7 @@ package com.yamilrafart.apirest_productos.controller;
 
 import com.yamilrafart.apirest_productos.entity.Producto;
 import com.yamilrafart.apirest_productos.service.IProducto;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +21,9 @@ public class ProductoController {
 
 
     @PostMapping
-    public ResponseEntity<Producto> save(@RequestBody Producto producto) {
-
+    public ResponseEntity<Producto> save(@Valid @RequestBody Producto producto) {
         Producto productoGuardado = iProducto.save(producto);
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(productoGuardado);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productoGuardado);
     }
 
 
@@ -57,10 +55,8 @@ public class ProductoController {
     @PutMapping("/{id}")
     public ResponseEntity<Producto> update(
             @PathVariable Long id,
-            @RequestBody Producto producto){
-
+            @Valid @RequestBody Producto producto){
         producto.setId(id);
-
         return ResponseEntity.ok(iProducto.update(producto));
     }
 }
