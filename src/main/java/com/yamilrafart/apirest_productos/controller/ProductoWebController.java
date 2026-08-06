@@ -4,10 +4,7 @@ import com.yamilrafart.apirest_productos.entity.Producto;
 import com.yamilrafart.apirest_productos.service.IProducto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/web/productos")
@@ -36,12 +33,31 @@ public class ProductoWebController {
         return "producto-form"; // Retorna la vista producto-form.html
     }
 
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioDeEditar(@PathVariable Long id, Model model) {
+        // Busca el producto en la BD. Si existe, lo envía al formulario
+        // para que los campos aparezcan pre-llenados.
+        Producto producto = iProducto.findById(id);
+        model.addAttribute("producto", producto);
+        return "producto-form";
+    }
+
     @PostMapping("/guardar")
     public String guardarProducto(@ModelAttribute("producto") Producto producto) {
-        // Recibe el objeto lleno desde el formulario web y lo guarda usando el servicio
-        iProducto.save(producto);
+        // Si el producto tiene un ID, significa que ya existe, entonces lo actualiza.
+        // Si no tiene ID, es uno nuevo y lo guarda.
+        if (producto.getId() != null) {
+            iProducto.update(producto);
+        } else {
+            iProducto.save(producto);
+        }
+        return "redirect:/web/productos";
+    }
 
-        // "redirect:" le dice a Spring que recargue la página de la lista para ver el nuevo registro
+    @GetMapping("/eliminar/{id}")
+    public String eliminarProducto(@PathVariable Long id) {
+        // Elimina por ID y recarga la lista
+        iProducto.deleteById(id);
         return "redirect:/web/productos";
     }
 }

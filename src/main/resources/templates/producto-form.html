@@ -10,6 +10,9 @@
 <!-- El formulario hace un POST a la ruta /guardar -->
 <form th:action="@{/web/productos/guardar}" th:object="${producto}" method="POST">
 
+  <!-- Campo oculto para mantener el ID al editar -->
+  <input type="hidden" th:field="*{id}" />
+  
   <div>
     <label>Nombre:</label>
     <input type="text" th:field="*{nombre}" required />

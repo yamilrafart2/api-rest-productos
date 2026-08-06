@@ -16,17 +16,28 @@
         <th>Descripción</th>
         <th>Precio</th>
         <th>Fecha Creación</th>
+        <th>Acciones</th>
     </tr>
     </thead>
     <tbody>
-    <!-- Itera sobre la lista 'productos' enviada por el controlador -->
     <tr th:each="producto : ${productos}">
         <td th:text="${producto.id}"></td>
         <td th:text="${producto.nombre}"></td>
         <td th:text="${producto.descripcion}"></td>
         <td th:text="${producto.precio}"></td>
-        <!-- Formatea la fecha para que sea legible -->
         <td th:text="${#temporals.format(producto.fechaCreacion, 'dd/MM/yyyy HH:mm')}"></td>
+
+        <!-- Botones de acción -->
+        <td>
+            <!-- Pasa el ID en la URL de Thymeleaf -->
+            <a th:href="@{/web/productos/editar/{id}(id=${producto.id})}">Editar</a> |
+
+            <!-- Confirm de JavaScript para evitar borrados accidentales -->
+            <a th:href="@{/web/productos/eliminar/{id}(id=${producto.id})}"
+               onclick="return confirm('¿Estás seguro de eliminar este producto?');">
+                Eliminar
+            </a>
+        </td>
     </tr>
     </tbody>
 </table>
