@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<body>
+<header th:fragment="navbar" class="main-header">
+    <nav class="main-nav" aria-label="Navegación principal">
+        <h1 class="main-title">Mi Proyecto RESTful</h1>
+        <form th:action="@{/logout}" method="post" class="logout-form">
+            <button type="submit" class="btn btn-link" aria-label="Cerrar sesión">Cerrar Sesión</button>
+        </form>
+    </nav>
+</header>
+</body>
+</html>
