@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="login-body">
+<main class="login-container">
+    <header>
+        <h2 class="login-title">Bienvenido</h2>
+    </header>
+
+    <section aria-live="polite">
+        <div th:if="${param.error}" class="alert alert-error" role="alert">
+            Usuario o contraseña incorrectos.
+        </div>
+        <div th:if="${param.logout}" class="alert alert-success" role="status">
+            Has cerrado sesión exitosamente.
+        </div>
+    </section>
+
+    <form th:action="@{/login}" method="POST" aria-label="Formulario de inicio de sesión">
+        <div class="form-group">
+            <label for="username">Usuario</label>
+            <input type="text" id="username" name="username" required autofocus aria-required="true">
+        </div>
+        <div class="form-group">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="password" required aria-required="true">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+    </form>
+</main>
+</body>
+</html>
