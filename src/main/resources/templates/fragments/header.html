@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head th:fragment="head(title)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +12,9 @@
 <header th:fragment="navbar" class="main-header">
     <nav class="main-nav" aria-label="Navegación principal">
         <h1 class="main-title">Mi Proyecto RESTful</h1>
-        <form th:action="@{/logout}" method="post" class="logout-form">
-            <button type="submit" class="btn btn-link" aria-label="Cerrar sesión">
+        
+        <form th:action="@{/logout}" method="post" class="logout-form" id="logoutForm">
+            <button type="button" class="btn btn-link" aria-label="Cerrar sesión" onclick="abrirModalLogout()">
                 <svg style="width: 1.2rem; height: 1.2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
@@ -22,6 +23,17 @@
             </button>
         </form>
     </nav>
+    
+    <div id="modalLogout" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">Cerrar Sesión</div>
+            <div class="modal-body">¿Estás seguro de que deseas cerrar tu sesión actual?</div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="cerrarModalLogout()">Cancelar</button>
+                <button class="btn btn-danger" onclick="confirmarLogout()">Cerrar Sesión</button>
+            </div>
+        </div>
+    </div>
 </header>
 </body>
 </html>

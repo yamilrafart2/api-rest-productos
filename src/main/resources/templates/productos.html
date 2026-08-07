@@ -2,6 +2,15 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: head('Lista de Productos')}"></head>
 <body>
+<div class="toast-container" th:if="${msgExito != null}">
+    <div class="toast">
+        <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span th:text="${msgExito}"></span>
+    </div>
+</div>
 <div th:replace="~{fragments/header :: navbar}"></div>
 
 <main class="main-content">
@@ -45,17 +54,17 @@
                             </svg>
                             Editar
                         </a>
-                        <a th:href="@{/web/productos/eliminar/{id}(id=${producto.id})}"
-                           class="btn btn-danger"
-                           aria-label="Eliminar producto"
-                           onclick="confirmarEliminacion(event)">
+
+                        <button type="button" class="btn btn-danger" aria-label="Eliminar producto"
+                                th:data-url="@{/web/productos/eliminar/{id}(id=${producto.id})}"
+                                onclick="abrirModalEliminar(this.getAttribute('data-url'))">
                             <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor"
                                  viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
                             Eliminar
-                        </a>
+                        </button>
                     </td>
                 </tr>
                 </tbody>
@@ -63,6 +72,19 @@
         </div>
     </section>
 </main>
+
+<div id="modalEliminar" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">Eliminar Producto</div>
+        <div class="modal-body">¿Estás seguro de eliminar este producto? Esta acción es permanente y no se puede
+            deshacer.
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="cerrarModalEliminar()">Cancelar</button>
+            <button class="btn btn-danger" onclick="confirmarEliminacion()">Sí, Eliminar</button>
+        </div>
+    </div>
+</div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 

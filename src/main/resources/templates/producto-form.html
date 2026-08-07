@@ -14,19 +14,34 @@
 
             <div class="form-group">
                 <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" th:field="*{nombre}"/>
-                <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" class="error-text"></span>
+                <!-- th:classappend añade la clase input-error si hay errores en 'nombre' -->
+                <input type="text" id="nombre" th:field="*{nombre}"
+                       th:classappend="${#fields.hasErrors('nombre')} ? 'input-error' : ''"/>
+
+                <span th:if="${#fields.hasErrors('nombre')}" class="error-text">
+                        <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span th:errors="*{nombre}"></span>
+                    </span>
             </div>
 
             <div class="form-group">
                 <label for="descripcion">Descripción:</label>
-                <input type="text" id="descripcion" th:field="*{descripcion}"/>
+                <textarea id="descripcion" th:field="*{descripcion}" rows="4"></textarea>
             </div>
 
             <div class="form-group">
                 <label for="precio">Precio:</label>
-                <input type="number" id="precio" step="0.01" th:field="*{precio}"/>
-                <span th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}" class="error-text"></span>
+                <input type="number" id="precio" step="0.01" th:field="*{precio}"
+                       th:classappend="${#fields.hasErrors('precio')} ? 'input-error' : ''"/>
+
+                <span th:if="${#fields.hasErrors('precio')}" class="error-text">
+                        <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span th:errors="*{precio}"></span>
+                    </span>
             </div>
 
             <fieldset class="form-actions" aria-label="Acciones del formulario">
