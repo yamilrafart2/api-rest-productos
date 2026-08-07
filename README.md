@@ -1,26 +1,33 @@
-# API REST - Productos
+# Sistema de Inventario de Productos
 
-API REST desarrollada con **Java y Spring Boot** para la gestión de productos.  
-Permite realizar operaciones CRUD (Crear, Consultar, Actualizar y Eliminar) sobre el recurso **Producto**.
+Aplicación web y API REST desarrollada con **Java y Spring Boot** para la gestión de productos.  
+Permite realizar operaciones CRUD (Crear, Consultar, Actualizar y Eliminar) sobre el recurso **Producto** mediante una interfaz gráfica y endpoints REST, con seguridad implementada y exportación de reportes.
 
 La aplicación corre localmente en:
 
-```
+```text
 http://localhost:8080
 ```
 
 ---
 
-## 🚀 Tecnologías utilizadas
+## 🚀 Características Principales
 
-- Java
-- Spring Boot
-- Spring Web
-- Spring Data JPA / Hibernate
-- Spring Security
-- Maven
-- MySQL
-- Postman (para pruebas de endpoints)
+- **Interfaz de Usuario:** Vistas web dinámicas renderizadas del lado del servidor.
+- **Seguridad:** Autenticación de usuarios y control de accesos basados en roles (ADMIN, USER).
+- **Exportación:** Generación y descarga del listado de productos en formato Excel (`.xlsx`).
+- **API REST:** Endpoints estructurados para el consumo de datos desde clientes externos.
+
+---
+
+## 🛠️ Tecnologías utilizadas
+
+- **Backend:** Java 21, Spring Boot, Spring Web
+- **Frontend:** Thymeleaf, HTML5, CSS3
+- **Persistencia:** Spring Data JPA / Hibernate, MySQL
+- **Seguridad:** Spring Security, Thymeleaf Extras Spring Security
+- **Utilidades:** Apache POI (Exportación a Excel), Lombok, Maven
+- **Herramientas:** Postman (para pruebas de endpoints REST)
 
 ---
 
@@ -45,7 +52,7 @@ CREATE DATABASE productos;
 
 Configurar las credenciales de conexión en:
 
-```
+```text
 src/main/resources/application.properties
 ```
 
@@ -79,27 +86,27 @@ Ejecutar con Maven:
 ./mvnw spring-boot:run
 ```
 
-o desde IntelliJ ejecutando la clase principal de Spring Boot.
-
-La API estará disponible en:
-
-```
-http://localhost:8080
-```
+o desde IntelliJ ejecutando la clase principal de Spring Boot (`ApirestProductosApplication`).
 
 ---
 
-# 📌 Endpoints disponibles
+## 🌐 Rutas de la Interfaz Web (UI)
 
-## Crear producto
+| Operación | Método | Ruta | Permisos |
+|---|---|---|---|
+| Iniciar Sesión | GET/POST | `/login` | Público |
+| Listar Productos | GET | `/web/productos` | Autenticado (USER/ADMIN) |
+| Nuevo Producto | GET/POST | `/web/productos/nuevo` | ADMIN |
+| Editar Producto | GET/POST | `/web/productos/editar/{id}` | ADMIN |
+| Eliminar Producto| POST | `/web/productos/eliminar/{id}`| ADMIN |
+| Exportar a Excel | GET | `/web/productos/exportar/excel`| Autenticado (USER/ADMIN) |
 
-**POST**
+---
 
-```
-/productos
-```
+## 📌 Endpoints API REST
 
-Crea un nuevo producto.
+### Crear producto
+**POST** `/productos` *(Requiere rol ADMIN)*
 
 Ejemplo de JSON:
 
@@ -113,43 +120,24 @@ Ejemplo de JSON:
 
 ---
 
-## Obtener todos los productos
-
-**GET**
-
-```
-/productos
-```
+### Obtener todos los productos
+**GET** `/productos` *(Requiere Autenticación)*
 
 Retorna la lista completa de productos.
 
 ---
 
-## Obtener producto por ID
+### Obtener producto por ID
+**GET** `/productos/{id}` *(Requiere Autenticación)*
 
-**GET**
-
-```
-/productos/{id}
-```
-
-Ejemplo:
-
-```
-GET /productos/1
-```
+Ejemplo: `GET /productos/1`
 
 Retorna un producto específico según su identificador.
 
 ---
 
-## Actualizar producto
-
-**PUT**
-
-```
-/productos/{id}
-```
+### Actualizar producto
+**PUT** `/productos/{id}` *(Requiere rol ADMIN)*
 
 Actualiza los datos de un producto existente.
 
@@ -165,35 +153,12 @@ Ejemplo:
 
 ---
 
-## Eliminar producto
+### Eliminar producto
+**DELETE** `/productos/{id}` *(Requiere rol ADMIN)*
 
-**DELETE**
-
-```
-/productos/{id}
-```
-
-Ejemplo:
-
-```
-DELETE /productos/2
-```
+Ejemplo: `DELETE /productos/2`
 
 Elimina un producto por su ID.
-
----
-
-# 🧪 Pruebas con Postman
-
-El proyecto incluye una colección de Postman con los siguientes endpoints:
-
-| Operación | Método | Endpoint |
-|---|---|---|
-| Crear producto | POST | `/productos` |
-| Listar productos | GET | `/productos` |
-| Buscar por ID | GET | `/productos/{id}` |
-| Actualizar producto | PUT | `/productos/{id}` |
-| Eliminar producto | DELETE | `/productos/{id}` |
 
 ---
 
