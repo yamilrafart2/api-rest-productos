@@ -3,8 +3,15 @@
 <head th:replace="~{fragments/header :: head('Iniciar Sesión')}"></head>
 <body class="login-body">
 <main class="login-container">
-    <header>
-        <h2 class="login-title">Bienvenido</h2>
+    <header style="text-align: center; margin-bottom: 2rem;">
+        <svg style="width: 3.5rem; height: 3.5rem; color: var(--primary-color); margin-bottom: 1rem;" fill="none"
+             stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+        </svg>
+        <h2 class="login-title" style="margin-bottom: 0.5rem;">Gestión de Productos</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Ingresa tus credenciales para acceder al panel de
+            administración.</p>
     </header>
 
     <section aria-live="polite">
