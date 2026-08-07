@@ -18,4 +18,6 @@ public interface IProducto {
 
     ProductoDTO update(ProductoDTO productoDTO);
 
+    List<ProductoDTO> findAll();
+
 }

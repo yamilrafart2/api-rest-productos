@@ -78,4 +78,11 @@ public class ProductoServiceImpl implements IProducto {
         Producto productoActualizado = productoRepository.save(productoBD);
         return productoMapper.toDTO(productoActualizado);
     }
+
+    @Override
+    public List<ProductoDTO> findAll() {
+        return productoRepository.findAll().stream()
+                .map(productoMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 }

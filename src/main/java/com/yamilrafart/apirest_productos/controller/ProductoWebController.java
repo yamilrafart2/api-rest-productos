@@ -2,21 +2,34 @@ package com.yamilrafart.apirest_productos.controller;
 
 import com.yamilrafart.apirest_productos.dto.ProductoDTO;
 import com.yamilrafart.apirest_productos.service.IProducto;
+import com.yamilrafart.apirest_productos.service.ProductoExportService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.List;
+
 @Controller
 @RequestMapping("/web/productos")
 public class ProductoWebController {
 
     private final IProducto iProducto;
+
+    @Autowired
+    private ProductoExportService productoExportService;
 
     public ProductoWebController(IProducto iProducto) {
         this.iProducto = iProducto;
@@ -75,5 +88,20 @@ public class ProductoWebController {
         iProducto.deleteById(id);
         redirectAttributes.addFlashAttribute("msgExito", "Producto eliminado correctamente.");
         return "redirect:/web/productos";
+    }
+
+    @GetMapping("/exportar/excel")
+    public ResponseEntity<InputStreamResource> exportarExcel() throws IOException {
+        List<ProductoDTO> productos = iProducto.findAll();
+        ByteArrayInputStream in = productoExportService.exportarExcel(productos);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=productos.xlsx");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(new InputStreamResource(in));
     }
 }
