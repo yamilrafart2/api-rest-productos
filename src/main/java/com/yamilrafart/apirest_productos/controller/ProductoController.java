@@ -1,6 +1,6 @@
 package com.yamilrafart.apirest_productos.controller;
 
-import com.yamilrafart.apirest_productos.entity.Producto;
+import com.yamilrafart.apirest_productos.dto.ProductoDTO;
 import com.yamilrafart.apirest_productos.service.IProducto;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -19,44 +19,33 @@ public class ProductoController {
         this.iProducto = iProducto;
     }
 
-
     @PostMapping
-    public ResponseEntity<Producto> save(@Valid @RequestBody Producto producto) {
-        Producto productoGuardado = iProducto.save(producto);
+    public ResponseEntity<ProductoDTO> save(@Valid @RequestBody ProductoDTO productoDTO) {
+        ProductoDTO productoGuardado = iProducto.save(productoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(productoGuardado);
     }
 
-
     @GetMapping
-    public ResponseEntity<List<Producto>> findAll(){
-
+    public ResponseEntity<List<ProductoDTO>> findAll(){
         return ResponseEntity.ok(iProducto.findAll());
     }
 
-
     @GetMapping("/{id}")
-    public ResponseEntity<Producto> findById(
-            @PathVariable Long id){
-
+    public ResponseEntity<ProductoDTO> findById(@PathVariable Long id){
         return ResponseEntity.ok(iProducto.findById(id));
     }
 
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(
-            @PathVariable Long id){
-
+    public ResponseEntity<Void> deleteById(@PathVariable Long id){
         iProducto.deleteById(id);
-
         return ResponseEntity.noContent().build();
     }
 
-
     @PutMapping("/{id}")
-    public ResponseEntity<Producto> update(
+    public ResponseEntity<ProductoDTO> update(
             @PathVariable Long id,
-            @Valid @RequestBody Producto producto){
-        producto.setId(id);
-        return ResponseEntity.ok(iProducto.update(producto));
+            @Valid @RequestBody ProductoDTO productoDTO){
+        productoDTO.setId(id);
+        return ResponseEntity.ok(iProducto.update(productoDTO));
     }
 }

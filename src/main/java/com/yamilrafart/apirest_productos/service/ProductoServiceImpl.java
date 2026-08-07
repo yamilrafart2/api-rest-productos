@@ -1,39 +1,50 @@
 package com.yamilrafart.apirest_productos.service;
 
+import com.yamilrafart.apirest_productos.dto.ProductoDTO;
 import com.yamilrafart.apirest_productos.entity.Producto;
 import com.yamilrafart.apirest_productos.exception.ResourceNotFoundException;
+import com.yamilrafart.apirest_productos.mapper.ProductoMapper;
 import com.yamilrafart.apirest_productos.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductoServiceImpl implements IProducto {
 
     private final ProductoRepository productoRepository;
+    private final ProductoMapper productoMapper;
 
-    public ProductoServiceImpl(ProductoRepository productoRepository) {
+    public ProductoServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper) {
         this.productoRepository = productoRepository;
+        this.productoMapper = productoMapper;
     }
 
     @Override
     @Transactional
-    public Producto save(Producto producto) {
-        return productoRepository.save(producto);
+    public ProductoDTO save(ProductoDTO productoDTO) {
+        Producto producto = productoMapper.toEntity(productoDTO);
+        Producto productoGuardado = productoRepository.save(producto);
+        return productoMapper.toDTO(productoGuardado);
     }
 
     @Override
-    @Transactional(readOnly = true) // readOnly = true optimiza las consultas de solo lectura
-    public List<Producto> findAll() {
-        return productoRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<ProductoDTO> findAll() {
+        return productoRepository.findAll()
+                .stream()
+                .map(productoMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    @Transactional(readOnly = true) // readOnly = true optimiza las consultas de solo lectura
-    public Producto findById(Long id) {
-        return productoRepository.findById(id)
+    @Transactional(readOnly = true)
+    public ProductoDTO findById(Long id) {
+        Producto producto = productoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el ID: " + id));
+        return productoMapper.toDTO(producto);
     }
 
     @Override
@@ -47,14 +58,15 @@ public class ProductoServiceImpl implements IProducto {
 
     @Override
     @Transactional
-    public Producto update(Producto producto) {
-        //findById para buscar y lanzar la excepción si no existe
-        Producto productoBD = this.findById(producto.getId());
+    public ProductoDTO update(ProductoDTO productoDTO) {
+        Producto productoBD = productoRepository.findById(productoDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el ID: " + productoDTO.getId()));
 
-        productoBD.setNombre(producto.getNombre());
-        productoBD.setDescripcion(producto.getDescripcion());
-        productoBD.setPrecio(producto.getPrecio());
+        productoBD.setNombre(productoDTO.getNombre());
+        productoBD.setDescripcion(productoDTO.getDescripcion());
+        productoBD.setPrecio(productoDTO.getPrecio());
 
-        return productoRepository.save(productoBD);
+        Producto productoActualizado = productoRepository.save(productoBD);
+        return productoMapper.toDTO(productoActualizado);
     }
 }

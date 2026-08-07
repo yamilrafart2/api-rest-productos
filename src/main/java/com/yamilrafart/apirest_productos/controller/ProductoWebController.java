@@ -1,6 +1,6 @@
 package com.yamilrafart.apirest_productos.controller;
 
-import com.yamilrafart.apirest_productos.entity.Producto;
+import com.yamilrafart.apirest_productos.dto.ProductoDTO;
 import com.yamilrafart.apirest_productos.service.IProducto;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -27,28 +27,28 @@ public class ProductoWebController {
 
     @GetMapping("/nuevo")
     public String mostrarFormularioDeCreacion(Model model) {
-        model.addAttribute("producto", new Producto());
+        model.addAttribute("producto", new ProductoDTO());
         return "producto-form";
     }
 
     @GetMapping("/editar/{id}")
     public String mostrarFormularioDeEditar(@PathVariable Long id, Model model) {
-        Producto producto = iProducto.findById(id);
-        model.addAttribute("producto", producto);
+        ProductoDTO productoDTO = iProducto.findById(id);
+        model.addAttribute("producto", productoDTO);
         return "producto-form";
     }
 
     @PostMapping("/guardar")
-    public String guardarProducto(@Valid @ModelAttribute("producto") Producto producto, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String guardarProducto(@Valid @ModelAttribute("producto") ProductoDTO productoDTO, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "producto-form";
         }
 
-        if (producto.getId() != null) {
-            iProducto.update(producto);
+        if (productoDTO.getId() != null) {
+            iProducto.update(productoDTO);
             redirectAttributes.addFlashAttribute("msgExito", "Producto actualizado correctamente.");
         } else {
-            iProducto.save(producto);
+            iProducto.save(productoDTO);
             redirectAttributes.addFlashAttribute("msgExito", "Producto creado exitosamente.");
         }
         return "redirect:/web/productos";
