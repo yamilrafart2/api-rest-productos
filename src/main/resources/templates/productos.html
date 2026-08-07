@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/header :: head('Lista de Productos')}"></head>
 <body>
 <div class="toast-container" th:if="${msgExito != null}">
@@ -17,7 +17,8 @@
     <section class="card" aria-labelledby="titulo-gestion">
         <header class="card-header">
             <h2 id="titulo-gestion">Gestión de Productos</h2>
-            <a th:href="@{/web/productos/nuevo}" class="btn btn-primary" aria-label="Crear un nuevo producto">
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/web/productos/nuevo}" class="btn btn-primary"
+               aria-label="Crear un nuevo producto">
                 <svg style="width: 1.2rem; height: 1.2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
@@ -27,12 +28,17 @@
 
         <!-- Formulario de Búsqueda -->
         <form th:action="@{/web/productos}" method="get" class="search-container">
-            <input type="text" name="keyword" th:value="${keyword}" placeholder="Buscar productos por nombre..." class="search-input" aria-label="Buscar productos">
+            <input type="text" name="keyword" th:value="${keyword}" placeholder="Buscar productos por nombre..."
+                   class="search-input" aria-label="Buscar productos">
             <button type="submit" class="btn btn-primary">
-                <svg style="width: 1.2rem; height: 1.2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <svg style="width: 1.2rem; height: 1.2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
                 Buscar
             </button>
-            <a th:href="@{/web/productos}" class="btn btn-outline" th:if="${keyword != null and keyword != ''}">Limpiar</a>
+            <a th:href="@{/web/productos}" class="btn btn-outline"
+               th:if="${keyword != null and keyword != ''}">Limpiar</a>
         </form>
 
         <div class="table-container">
@@ -44,7 +50,7 @@
                     <th scope="col">Descripción</th>
                     <th scope="col">Precio</th>
                     <th scope="col">Fecha Creación</th>
-                    <th scope="col">Acciones</th>
+                    <th scope="col" sec:authorize="hasRole('ADMIN')">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -54,7 +60,7 @@
                     <td th:text="${producto.descripcion}"></td>
                     <td th:text="${producto.precio}"></td>
                     <td th:text="${#temporals.format(producto.fechaCreacion, 'dd/MM/yyyy HH:mm')}"></td>
-                    <td class="actions">
+                    <td class="actions" sec:authorize="hasRole('ADMIN')">
                         <a th:href="@{/web/productos/editar/{id}(id=${producto.id})}" class="btn btn-primary"
                            aria-label="Editar producto">
                             <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor"
@@ -82,7 +88,11 @@
 
             <!-- Mensaje de estado vacío -->
             <div th:if="${totalItems == 0}" class="empty-state">
-                <svg style="width: 3rem; height: 3rem; margin: 0 auto 1rem auto; color: var(--text-muted);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                <svg style="width: 3rem; height: 3rem; margin: 0 auto 1rem auto; color: var(--text-muted);" fill="none"
+                     stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                </svg>
                 <p>No se encontraron productos que coincidan con la búsqueda.</p>
             </div>
         </div>
@@ -95,17 +105,21 @@
             <ul class="pagination-controls">
                 <!-- Botón Anterior -->
                 <li th:class="${currentPage == 0 ? 'page-item disabled' : 'page-item'}">
-                    <a th:href="@{/web/productos(page=${currentPage - 1}, keyword=${keyword})}" class="page-link" aria-label="Anterior">&laquo;</a>
+                    <a th:href="@{/web/productos(page=${currentPage - 1}, keyword=${keyword})}" class="page-link"
+                       aria-label="Anterior">&laquo;</a>
                 </li>
 
                 <!-- Números de Página -->
-                <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == i - 1 ? 'page-item active' : 'page-item'}">
-                    <a th:href="@{/web/productos(page=${i - 1}, keyword=${keyword})}" th:text="${i}" class="page-link"></a>
+                <li th:each="i : ${#numbers.sequence(1, totalPages)}"
+                    th:class="${currentPage == i - 1 ? 'page-item active' : 'page-item'}">
+                    <a th:href="@{/web/productos(page=${i - 1}, keyword=${keyword})}" th:text="${i}"
+                       class="page-link"></a>
                 </li>
 
                 <!-- Botón Siguiente -->
                 <li th:class="${currentPage == totalPages - 1 ? 'page-item disabled' : 'page-item'}">
-                    <a th:href="@{/web/productos(page=${currentPage + 1}, keyword=${keyword})}" class="page-link" aria-label="Siguiente">&raquo;</a>
+                    <a th:href="@{/web/productos(page=${currentPage + 1}, keyword=${keyword})}" class="page-link"
+                       aria-label="Siguiente">&raquo;</a>
                 </li>
             </ul>
         </div>

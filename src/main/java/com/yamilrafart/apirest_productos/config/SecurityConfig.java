@@ -22,6 +22,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**").permitAll()
+                        // Restringir rutas de modificación solo para ADMIN
+                        .requestMatchers("/web/productos/nuevo", "/web/productos/editar/**", "/web/productos/eliminar/**").hasRole("ADMIN")
+                        // Cualquier otra petición requiere solo estar autenticado (puede ser USER o ADMIN)
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
