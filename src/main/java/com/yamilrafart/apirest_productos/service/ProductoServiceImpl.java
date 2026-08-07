@@ -5,6 +5,8 @@ import com.yamilrafart.apirest_productos.entity.Producto;
 import com.yamilrafart.apirest_productos.exception.ResourceNotFoundException;
 import com.yamilrafart.apirest_productos.mapper.ProductoMapper;
 import com.yamilrafart.apirest_productos.repository.ProductoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,11 +34,18 @@ public class ProductoServiceImpl implements IProducto {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProductoDTO> findAll() {
-        return productoRepository.findAll()
-                .stream()
-                .map(productoMapper::toDTO)
-                .collect(Collectors.toList());
+    public Page<ProductoDTO> findAllPaginated(String keyword, Pageable pageable) {
+        Page<Producto> paginaProductos;
+
+        // Si hay una palabra clave, busca por nombre. Si no, trae todos paginados
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            paginaProductos = productoRepository.findByNombreContainingIgnoreCase(keyword, pageable);
+        } else {
+            paginaProductos = productoRepository.findAll(pageable);
+        }
+
+        // Convierte la página de Entidades a una página de DTOs
+        return paginaProductos.map(productoMapper::toDTO);
     }
 
     @Override

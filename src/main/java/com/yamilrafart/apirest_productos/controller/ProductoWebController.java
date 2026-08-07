@@ -3,6 +3,9 @@ package com.yamilrafart.apirest_productos.controller;
 import com.yamilrafart.apirest_productos.dto.ProductoDTO;
 import com.yamilrafart.apirest_productos.service.IProducto;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,8 +23,21 @@ public class ProductoWebController {
     }
 
     @GetMapping
-    public String listarProductos(Model model) {
-        model.addAttribute("productos", iProducto.findAll());
+    public String listarProductos(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProductoDTO> paginaProductos = iProducto.findAllPaginated(keyword, pageable);
+
+        model.addAttribute("productos", paginaProductos.getContent()); // Solo la lista de productos
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", paginaProductos.getTotalPages());
+        model.addAttribute("totalItems", paginaProductos.getTotalElements());
+        model.addAttribute("keyword", keyword); // Para mantener la búsqueda en el input
+
         return "productos";
     }
 
