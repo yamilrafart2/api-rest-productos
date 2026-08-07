@@ -1,11 +1,25 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Proyecto</title>
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
 <body>
 <header th:fragment="navbar" class="main-header">
     <nav class="main-nav" aria-label="Navegación principal">
         <h1 class="main-title">Mi Proyecto RESTful</h1>
         <form th:action="@{/logout}" method="post" class="logout-form">
-            <button type="submit" class="btn btn-link" aria-label="Cerrar sesión">Cerrar Sesión</button>
+            <button type="submit" class="btn btn-link" aria-label="Cerrar sesión">
+                <svg style="width: 1.2rem; height: 1.2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+                Cerrar Sesión
+            </button>
         </form>
     </nav>
 </header>
